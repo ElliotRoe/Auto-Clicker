@@ -12,6 +12,7 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -21,6 +22,8 @@ public class Runner {
 	private static Point clickLoc = null;
 
 	private static int screenWidth, screenHeight;
+
+	private static JLabel locationLabel = null;
 
 	public static void main(String[] args) {
 
@@ -38,6 +41,7 @@ public class Runner {
 				clickLoc = arg0.getLocationOnScreen();
 				System.out.println(clickLoc);
 				locPicker.dispose();
+				locationLabel.setText("Click Location         ( " + clickLoc.getX() + " , " + clickLoc.getY() + " )");
 
 			}
 
@@ -84,12 +88,16 @@ public class Runner {
 		JLabel intervalTitle = new JLabel("Click Interval (Sec)");
 		intervalTitle.setBounds(10, 10, 150, 20);
 
-		JLabel locationLabel = new JLabel("Click Location");
-		locationLabel.setBounds(10, 40, 150, 20);
+		locationLabel = new JLabel("Click Location         ( -- , -- )");
+		locationLabel.setBounds(10, 40, 300, 20);
+
+		JButton settingButton = new JButton("Submit");
+		settingButton.setBounds(730 / 2, 470, 100, 10);
 
 		main.getContentPane().add(interval);
 		main.getContentPane().add(intervalTitle);
 		main.getContentPane().add(locationLabel);
+		main.getContentPane().add(settingButton);
 
 		main.setSize(730, 489);
 

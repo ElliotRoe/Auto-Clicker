@@ -1,14 +1,19 @@
 
 import java.awt.AWTEvent;
+import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -25,6 +30,8 @@ public class Runner {
 
 	private static JLabel locationLabel = null;
 
+	private static int intervalMillis = 1000;
+
 	public static void main(String[] args) {
 
 		JFrame main = new JFrame("Auto-Clicker Settings");
@@ -40,7 +47,7 @@ public class Runner {
 			public void mouseClicked(MouseEvent arg0) {
 				clickLoc = arg0.getLocationOnScreen();
 				System.out.println(clickLoc);
-				locPicker.dispose();
+				locPicker.setVisible(false);
 				locationLabel.setText("Click Location         ( " + clickLoc.getX() + " , " + clickLoc.getY() + " )");
 
 			}
@@ -81,6 +88,7 @@ public class Runner {
 		locPicker.setVisible(true);
 
 		main.getContentPane().setLayout(null);
+		main.setLocation(screenWidth / 2 - 100, screenHeight / 2 - 100);
 
 		JTextField interval = new JTextField();
 		interval.setBounds(150, 10, 86, 20);
@@ -92,16 +100,44 @@ public class Runner {
 		locationLabel.setBounds(10, 40, 300, 20);
 
 		JButton settingButton = new JButton("Submit");
-		settingButton.setBounds(730 / 2, 470, 100, 10);
+		settingButton.setBounds(50, 90, 140, 40);
+
+		settingButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println(interval.getText());
+				if (interval.getText().equals("") || locPicker.isVisible()) {
+
+				} else {
+					try {
+						intervalMillis = Integer.parseInt(interval.getText()) * 1000;
+						main.setVisible(false);
+						runClicker();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+
+			}
+
+		});
 
 		main.getContentPane().add(interval);
 		main.getContentPane().add(intervalTitle);
 		main.getContentPane().add(locationLabel);
 		main.getContentPane().add(settingButton);
 
-		main.setSize(730, 489);
+		main.setSize(265, 180);
 
 		main.setVisible(true);
+
+	}
+
+	public static void runClicker() throws AWTException {
+
+		Clicker robotClicker = new Clicker(intervalMillis, clickLoc);
+		robotClicker.start();
 
 	}
 

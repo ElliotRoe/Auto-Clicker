@@ -7,7 +7,7 @@ import java.awt.event.KeyListener;
 
 import javafx.scene.input.KeyCode;
 
-public class Clicker extends Thread implements KeyListener {
+public class Clicker extends Thread {
 
 	Point location;
 	int interval;
@@ -27,7 +27,8 @@ public class Clicker extends Thread implements KeyListener {
 	@Override
 	public void run() {
 
-		for (int i = 0; i < 10; i++) {
+		for (; stop == false;) {
+
 			leftClick();
 			robot.delay(interval);
 		}
@@ -35,36 +36,15 @@ public class Clicker extends Thread implements KeyListener {
 
 	private void leftClick() {
 		robot.mousePress(InputEvent.BUTTON1_MASK);
+		System.out.println("Mouse Down");
 		robot.delay(200);
 		robot.mouseRelease(InputEvent.BUTTON1_MASK);
+		System.out.println("Mouse Up");
 		robot.delay(200);
 	}
 
-	private void end() {
+	public void end() {
 		stop = true;
-	}
-
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
-
-			end();
-			System.out.println("Program Closed");
-		}
-
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
